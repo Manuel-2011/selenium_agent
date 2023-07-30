@@ -1,0 +1,6 @@
+selenium
+chromedriver-autoinstaller
+openai
+python-dotenv
+requests
+beautifulsoup4
