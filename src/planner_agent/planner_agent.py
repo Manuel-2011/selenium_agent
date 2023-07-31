@@ -9,6 +9,7 @@ sys.path.append(os.getcwd())
 # importing project modules
 from openai_utils import compile_messages, format_message,  get_completion_from_messages
 from planner_agent.prompts import CREATE_PLAN
+from planner_agent.constants import DEFAULT_RAW_PLAN
 
 
 def get_raw_plan(goal: str) -> str:
@@ -26,11 +27,15 @@ def parse_plan(plan: str) -> list[str]:
 
     return [item.strip() for item in numbered_items]
 
-def get_plan(goal: str) -> list[str]:
-    raw_plan, context = get_raw_plan(goal)
+def get_plan(goal: str, test_mode = False) -> list[str]:
+    if test_mode:
+        raw_plan = DEFAULT_RAW_PLAN
+        print(raw_plan)
+    else:
+        raw_plan, context = get_raw_plan(goal)
 
     # Get user feedback on the plan
-    while True:
+    while True and not test_mode:
         print("Here is the plan:")
         print(raw_plan)
         print("Does this plan look good?")

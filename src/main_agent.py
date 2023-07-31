@@ -5,6 +5,7 @@ from openai_utils import get_code_from_open_ai
 from html_cleaner import get_cleaned_html
 from planner_agent.planner_agent import get_plan
 import queue
+import os
 
 
 def send_message(message):
@@ -22,14 +23,20 @@ def send_message(message):
 
 
 def main():
+    is_test_mode = os.getenv("TEST_MODE", False)
+
     history_messages = []
-    goal = input("Enter a goal for the web browser agent or exit to quit: ")
+
+    if is_test_mode:
+        goal = "Search a blue car"
+    else:
+        goal = input("Enter a goal for the web browser agent or exit to quit: ")
 
     if goal.lower() == "exit":
         return
     
     actions = queue.Queue()
-    for action in get_plan(goal):
+    for action in get_plan(goal, test_mode=is_test_mode):
         actions.put(action)
 
     while True:
