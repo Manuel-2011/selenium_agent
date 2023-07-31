@@ -1,6 +1,7 @@
 import os
 import openai
 from dotenv import load_dotenv, find_dotenv
+from typing import Literal
 
 _ = load_dotenv(find_dotenv())  # read local .env file
 
@@ -30,6 +31,16 @@ RESPONSE_MESSAGE = {
     "role": "assistant",
     "content": """{response}""",
 }
+
+TypeMessage = dict[Literal["role", "content"], str]
+
+def format_message(message: str, role:Literal["user", "system", "assistant"]="user") -> TypeMessage:
+    return {
+        "role": role,
+        "content": message
+    }
+
+def compile_messages(*messages: tuple[TypeMessage]) -> list[TypeMessage]: return list(messages)
 
 
 def replace_action_in_message(message, action):

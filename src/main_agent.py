@@ -3,6 +3,8 @@ import pprint
 import requests
 from openai_utils import get_code_from_open_ai
 from html_cleaner import get_cleaned_html
+from planner_agent.planner_agent import get_plan
+import queue
 
 
 def send_message(message):
@@ -21,10 +23,19 @@ def send_message(message):
 
 def main():
     history_messages = []
+    goal = input("Enter a goal for the web browser agent or exit to quit: ")
+
+    if goal.lower() == "exit":
+        return
+    
+    print('This is the plan for the goal: ')
+    actions = queue.Queue()
+    for action in get_plan(goal):
+        actions.put(action)
+        print(action)
+
     while True:
-        action = input("Enter a web action or exit to quit: ")
-        if action.lower() == "exit":
-            break
+        action = actions.get()
         is_error = input("Is this an error? (y/n): ")
         is_error = is_error.lower() == "y"
         history_messages, message = get_code_from_open_ai(
