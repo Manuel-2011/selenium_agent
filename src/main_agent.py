@@ -28,11 +28,9 @@ def main():
     if goal.lower() == "exit":
         return
     
-    print('This is the plan for the goal: ')
     actions = queue.Queue()
     for action in get_plan(goal):
         actions.put(action)
-        print(action)
 
     while True:
         action = actions.get()
