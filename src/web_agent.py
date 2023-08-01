@@ -36,14 +36,13 @@ def run_function_from_string(function_string, *args):
         if function_name in local_namespace:
             function = local_namespace[function_name]
             # Call the function with the provided arguments
-            return function(*args), False
+            return function(*args), False, None
 
         else:
             raise ValueError(f"Function '{function_name}' not found in the string.")
     except Exception as e:
         print(e)
-        return str(e), True
-    return None
+        return driver.page_source, True, str(e)
 
 
 # Define a route for the root endpoint
@@ -51,5 +50,5 @@ def run_function_from_string(function_string, *args):
 def read_root(data: dict):
     global driver
     print(data)
-    response, is_error = run_function_from_string(data["code"], driver)
-    return {"is_error": is_error, "response": response}
+    response, is_error, error_msg = run_function_from_string(data["code"], driver)
+    return {"is_error": is_error, "state": response, "error_msg": error_msg}

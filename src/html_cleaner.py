@@ -280,7 +280,7 @@ def remove_extra_info(html):
             element.extract()
 
     # Remove extra attributes from tags
-    essential_attributes = ["id", "class", "href", "src"]
+    essential_attributes = ["id", "class", "href", "src", "title", "type", "value"]
     for tag in soup(recursive=True):
         clean_class_names(tag)
         extra_attributes = [

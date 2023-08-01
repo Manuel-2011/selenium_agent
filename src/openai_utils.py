@@ -19,7 +19,7 @@ CREATION_MESSAGE = {
     "content": """Create a function that {action} using selenium.
     - The parameter should be the driver. 
     - Don't include any explanations in your responses. Dont include imports.
-    - The return should be an html""",
+    - The return of the function must me driver.page_source""",
 }
 
 ERROR_MESSAGE = {
@@ -66,9 +66,9 @@ def get_completion_from_messages(messages, model="gpt-3.5-turbo", temperature=0)
     return response.choices[0].message["content"]
 
 
-def get_code_from_open_ai(action, messages, is_error=False):
+def get_code_from_open_ai(action, messages, feedback:str=None):
     context_messages = messages if messages else CONTEXT_MESSAGES_INIT
-    new_message = ERROR_MESSAGE if is_error else CREATION_MESSAGE
+    new_message = format_message(feedback) if feedback else CREATION_MESSAGE
     new_message = replace_action_in_message(new_message, action)
     context_messages.append(new_message)
     response = get_completion_from_messages(context_messages)
